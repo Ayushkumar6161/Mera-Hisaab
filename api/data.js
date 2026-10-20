@@ -3,7 +3,7 @@ import { db } from 'hatchable';
 export const access = 'user';
 export const methods = ['GET', 'PUT'];
 
-const empty = { money: [], expenses: [], borrow: [], savings: [], savingsRedemptions: [], splits: [], splitGroups: [], categories: [] };
+const empty = { money: [], expenses: [], borrow: [], savings: [], savingsRedemptions: [], splits: [], splitGroups: [], transfers: [], categories: [] };
 
 function clean(input) {
   const d = input && typeof input === 'object' ? input : {};
@@ -15,6 +15,7 @@ function clean(input) {
     savingsRedemptions: Array.isArray(d.savingsRedemptions) ? d.savingsRedemptions : [],
     splits: Array.isArray(d.splits) ? d.splits : [],
     splitGroups: Array.isArray(d.splitGroups) ? d.splitGroups : [],
+    transfers: Array.isArray(d.transfers) ? d.transfers : [],
     categories: Array.isArray(d.categories) ? d.categories.filter(x => typeof x === 'string') : []
   };
 }
@@ -46,6 +47,10 @@ export default async function (req, res) {
     [userId]
   );
   const existing = existingRows[0];
+  // Older tabs/clients do not know about transfers; preserve cloud transfers when that field is omitted.
+  if (!Object.prototype.hasOwnProperty.call(req.body || {}, 'transfers')) {
+    data.transfers = Array.isArray(existing?.data?.transfers) ? existing.data.transfers : [];
+  }
   const existingHas = !!existing && hasRecords(existing.data || {});
   const incomingHas = hasRecords(data);
 
