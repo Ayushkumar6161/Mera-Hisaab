@@ -16,6 +16,7 @@ function clean(input) {
     splits: Array.isArray(d.splits) ? d.splits : [],
     splitGroups: Array.isArray(d.splitGroups) ? d.splitGroups : [],
     transfers: Array.isArray(d.transfers) ? d.transfers : [],
+    walletOpeningBalances: d.walletOpeningBalances && typeof d.walletOpeningBalances === 'object' ? { cash: Number(d.walletOpeningBalances.cash || 0), upi: Number(d.walletOpeningBalances.upi || 0) } : { cash: 0, upi: 0 },
     categories: Array.isArray(d.categories) ? d.categories.filter(x => typeof x === 'string') : []
   };
 }
@@ -50,6 +51,10 @@ export default async function (req, res) {
   // Older tabs/clients do not know about transfers; preserve cloud transfers when that field is omitted.
   if (!Object.prototype.hasOwnProperty.call(req.body || {}, 'transfers')) {
     data.transfers = Array.isArray(existing?.data?.transfers) ? existing.data.transfers : [];
+  }
+  // Preserve wallet opening balances when an older client does not know this field.
+  if (!Object.prototype.hasOwnProperty.call(req.body || {}, 'walletOpeningBalances')) {
+    data.walletOpeningBalances = existing?.data?.walletOpeningBalances || { cash: 0, upi: 0 };
   }
   const existingHas = !!existing && hasRecords(existing.data || {});
   const incomingHas = hasRecords(data);
