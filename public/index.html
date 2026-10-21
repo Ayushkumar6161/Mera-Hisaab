@@ -869,8 +869,8 @@ async function refreshCloudDataSafe(){
     const remoteAt=payload?.updatedAt?new Date(payload.updatedAt).getTime():0;
     const localAt=Number(localStorage.getItem("myExpensesDataSavedAt")||0);
     if(remoteAt && localAt && localAt>=remoteAt)return;
-    const keys=["money","expenses","borrow","savings","splits","splitGroups","transfers","categories"];
-    const has=d=>keys.some(k=>Array.isArray(d?.[k])&&d[k].length);
+    const keys=["money","expenses","borrow","savings","savingsRedemptions","splits","splitGroups","transfers","categories"];
+    const has=d=>keys.some(k=>Array.isArray(d?.[k])&&d[k].length)||Number(d?.walletOpeningBalances?.cash||0)!==0||Number(d?.walletOpeningBalances?.upi||0)!==0;
     if(!has(remote)){
       // Propagate an intentional cloud-empty state (for example, deletion of the final record)
       // only when the cloud revision is newer than this device's saved revision.
