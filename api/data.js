@@ -22,7 +22,10 @@ function clean(input) {
 }
 
 function hasRecords(d) {
-  return Object.values(d).some(v => Array.isArray(v) && v.length > 0);
+  const hasArrayRecords = Object.values(d).some(v => Array.isArray(v) && v.length > 0);
+  const opening = d?.walletOpeningBalances || {};
+  const hasOpeningBalance = Number(opening.cash || 0) !== 0 || Number(opening.upi || 0) !== 0;
+  return hasArrayRecords || hasOpeningBalance;
 }
 
 export default async function (req, res) {
