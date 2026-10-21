@@ -638,7 +638,7 @@ function exportExcel(){
     ["Expenses",data.expenses||[],["Date","Category","Amount","Note"],["date","category","amount","note"]],
     ["Get Borrow",data.borrow||[],["Date","Type","Person","Amount","Note"],["date","type","person","amount","note"]],
     ["Savings",data.savings||[],["Date","Amount","Note"],["date","amount","note"]],
-    ["Splits",data.splits||[],["Date","Category","Description","Total","Participants","Note"],["date","category","title","amount","participants","note"]],
+    ["Splits",(data.splits||[]).map(s=>({...s,participants:(s.participants||[]).map(p=>{const paid=Array.isArray(p.payments)?p.payments.reduce((t,q)=>t+Number(q.amount||0),0):(p.status==="paid"?Number(p.amount||0):Number(p.paidAmount||0));return (p.name||"Member")+": share "+Number(p.amount||0)+", paid "+paid+(p.paymentMethod?" ("+p.paymentMethod+")":"")}).join("; ")})),["Date","Category","Description","Total","Participants / Payment Status","Note"],["date","category","title","amount","participants","note"]],
     ["Split Groups",data.splitGroups||[],["Name","Members","Created"],["name","members","createdAt"]],
     ["Cash Transfers",data.transfers||[],["Date","Direction","Amount","Note"],["date","direction","amount","note"]],
     ["Savings Redemptions",data.savingsRedemptions||[],["Date","Amount","Note"],["date","amount","note"]]
@@ -672,7 +672,7 @@ function exportPDF(){
     ["Expenses",data.expenses||[],["Date","Category","Amount","Note"],["date","category","amount","note"]],
     ["Get / Borrow",data.borrow||[],["Date","Type","Person","Amount","Note"],["date","type","person","amount","note"]],
     ["Savings",data.savings||[],["Date","Amount","Note"],["date","amount","note"]],
-    ["Splits",data.splits||[],["Date","Group","Description","Total","Your Share","Received","Note"],["date","group","description","total","yourShare","received","note"]],
+    ["Splits",(data.splits||[]).map(s=>{const own=(s.participants||[]).find(p=>p.isYou),received=(s.participants||[]).filter(p=>!p.isYou).reduce((total,p)=>total+(Array.isArray(p.payments)?p.payments.reduce((n,q)=>n+Number(q.amount||0),0):(p.status==="paid"?Number(p.amount||0):Number(p.paidAmount||0))),0),group=(data.splitGroups||[]).find(g=>String(g.id)===String(s.groupId));return {...s,group:group?.name||"",description:s.title||s.category||"",total:Number(s.amount||0),yourShare:Number(own?.amount||0),received}}),["Date","Group","Description","Total","Your Share","Received","Note"],["date","group","description","total","yourShare","received","note"]],
     ["Split Groups",data.splitGroups||[],["Name","Members","Created"],["name","members","createdAt"]],
     ["Cash Transfers",data.transfers||[],["Date","Direction","Amount","Note"],["date","direction","amount","note"]],
     ["Savings Redemptions",data.savingsRedemptions||[],["Date","Amount","Note"],["date","amount","note"]]
