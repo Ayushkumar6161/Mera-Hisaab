@@ -74,7 +74,7 @@ export default async function (req, res) {
 
   // Never let an accidental empty client state erase a non-empty cloud account.
   // An explicit empty-state write is only allowed when the cloud row is already empty.
-  if (existingHas && !incomingHas) {
+  if (existingHas && !incomingHas && req.body?.allowEmptyState !== true) {
     console.warn('expense_data PUT blocked empty overwrite', JSON.stringify({
       userId,
       existingUpdatedAt: existing.updated_at,
@@ -84,6 +84,15 @@ export default async function (req, res) {
       error: 'empty_overwrite_blocked',
       message: 'Cloud data was not changed because the incoming payload is empty.'
     });
+  }
+
+  // If the owner explicitly clears the final record, snapshot the prior non-empty state first.
+  if (existingHas && !incomingHas && req.body?.allowEmptyState === true) {
+    await db.query(
+      `INSERT INTO expense_data_backups (user_id, data, source_updated_at)
+       VALUES ($1, $2::jsonb, $3)`,
+      [userId, JSON.stringify(existing.data), existing.updated_at]
+    );
   }
 
   const result = await db.query(
