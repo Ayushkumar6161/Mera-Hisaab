@@ -119,7 +119,7 @@ button:disabled{opacity:.55;cursor:wait}
   }
   if(!A){say('Sign-in is unavailable right now. Please refresh the page.','err');submit.disabled=true;return;}
   A.getSession().then(function(s){if(s&&s.user)done();}).catch(function(){});
-  if(A.attachPasskeyAutofill){try{A.attachPasskeyAutofill(emailEl).then(function(r){if(r&&r.user)done();}).catch(function(){});}catch(e){}}
+  // Avoid starting a browser conditional WebAuthn request on page load. Some browsers keep it pending and then reject registerPasskey() with "A request is already pending." Existing passkeys can still be offered after the email is entered via signInWithPasskey().
   passkeyAdd.addEventListener('click',function(){
     passkeyAdd.disabled=true;passkeySkip.disabled=true;say('');
     A.registerPasskey().then(function(r){if(!r)decline();done();}).catch(function(err){passkeyAdd.disabled=false;passkeySkip.disabled=false;say((err&&err.message)||'Could not save the passkey. You can continue without one.','err');});
