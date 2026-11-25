@@ -1,19 +1,30 @@
-# My Expenses Tracker
+# Mera-Hisaab
 
-[![Deploy to Hatchable](https://hatchable.com/deploy-button.svg)](https://hatchable.com/deploy?repo=https://github.com/Ayushkumar6161/my-expenses-tracker)
+[[https://hatchable.com/deploy-button.svg]](https://hatchable.com/deploy?repo=https://github.com/Ayushkumar6161/Mera-Hisaab)
 
-Personal expense tracker with parent money, extra money, daily expenses, left amount, and separate get/borrow records. Syncs across phone and laptop with account-backed cloud storage.
+**Mera-Hisaab** is a personal finance, expense, and wallet tracker built as a fast, offline-ready Progressive Web App (PWA) with cloud account sync. Track daily expenses, Cash & UPI balances, split bills, savings, and get/borrow records across phone and desktop.
 
-This folder is a complete Hatchable project. Everything the app needs is in these files: pages, API routes, database migrations, seed data, and the hatchable.toml manifest that declares the services and keys it uses.
+## Features
 
-## Run your own copy
+- **Dashboard & Analytics:** Monthly overview with spending breakdowns, trends, and mini calendar.
+- **Expenses & Transaction History:** Add, search, filter, edit, and delete daily expenses with undo support.
+- **Cash & UPI Wallet:** Track Cash and UPI balances separately with wallet transfers.
+- **Money Received & Savings:** Log income, parent/extra money, and monthly savings.
+- **Get / Borrow & Split:** Keep separate records for money to receive/return and split expenses with friends.
+- **Reports & Exports:** Visual reports plus **Excel**, **PDF**, and **JSON Backup/Restore** exports.
+- **Installable App (PWA):** Install directly on Android, iOS, and Desktop with offline app-shell caching and Dark/Light mode.
 
-1. Go to https://hatchable.com/deploy
-2. Bring this folder as a .zip, or point the importer at a Git repository that contains it
-3. Your copy gets its own database, its own URL, and connects to your own keys
+## Tech Stack
 
-## About Hatchable
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript, PWA (`manifest.webmanifest`, Service Worker)
+- **Backend:** Hatchable Serverless APIs (`/api/account/*`, `/api/data`, `/api/profile`)
+- **Database:** PostgreSQL (`app_accounts`, `expense_data`, `expense_data_backups`, `user_profiles`)
 
-Hatchable is where AI-built apps go live. Connect the AI you already use and it can build, deploy, and run apps like this one for you.
+## Install as an App
 
-Built on Hatchable. https://hatchable.com
+- **Browser (Android / Desktop / iOS):** Open the app, click **Install App** in the sidebar or Settings, and add it to your Home Screen.
+- **Android APK:** Use the `android-app` + GitHub Actions workflow in this repository or [PWABuilder](https://www.pwabuilder.com/) to package an `.apk`.
+
+## Author
+
+Built by **Ayush Kumar** ([@Ayushkumar6161](https://github.com/Ayushkumar6161)) on [Hatchable](https://hatchable.com).
