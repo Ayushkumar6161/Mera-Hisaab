@@ -14,7 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
-    private static final String APP_URL = "https://mera-hisaab.hatchable.site";
+    private static final String APP_URL = "https://mera-hisaab-aki1.hatchable.site";
     private static final int FILE_CHOOSER_REQUEST_CODE = 1001;
     private WebView webView;
     private ValueCallback<Uri[]> filePathCallback;
